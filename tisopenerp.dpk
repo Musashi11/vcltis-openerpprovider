@@ -1,0 +1,59 @@
+package tisopenerp;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'VCL pour OpenERP TIS'}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  designide,
+  dsnap,
+  dbrtl,
+  vcldb,
+  IndyCore60,
+  IndySystem60,
+  IndyProtocols60,
+  Jcl,
+  dxPSCoreD6,
+  dxCoreD6,
+  dxEdtrD6,
+  dxcomnd6,
+  dxELibD6,
+  dxDBEdD6,
+  ECQDBCD6,
+  EQTLD6,
+  EQGridD6,
+  dxPSTLLnkD6,
+  dxPSdxDBGrLnkD6,
+  dxPSdxDBCtrlLnkD6,
+  tisvcl,
+  RxCtl6;
+
+contains
+  OpenERPProvider in 'OpenERPProvider.pas',
+  OpenERPSourceEditor in 'OpenERPSourceEditor.pas' {OpenERPProviderEditor},
+  uLoginDlg in 'uLoginDlg.pas' {LoginDlg},
+  uOpenERPLookupName in 'uOpenERPLookupName.pas' {VisOpenERPLookupName};
+
+end.
