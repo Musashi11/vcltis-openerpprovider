@@ -12,12 +12,12 @@ File_9=SourceModule,'C:\Program Files\Borland\Delphi6\Source\RXLib275_US\Units\T
 
 [Modules]
 Module0=c:\tranquilit\tisvcl\OpenERPProvider.pas
-Module1=C:\tranquilit\tisvcl\OpenERPSourceEditor.pas
+Module1=c:\program files\borland\delphi6\Lib\DBClient.pas
 Module2=c:\program files\borland\delphi6\source\vcl\DB.pas
 Module3=C:\tranquilit\tisvcl\uOpenERPLookupName.pas
-Module4=C:\tranquilit\waptmanage\uDMOpenERP.pas
-Module5=C:\tranquilit\waptmanage\uwaptservergui.pas
-Module6=c:\program files\borland\delphi6\Lib\DBClient.pas
+Module4=C:\tranquilit\tisvcl\OpenERPSourceEditor.pas
+Module5=C:\tranquilit\tisdashd6\uVisDetailsTask.pas
+Module6=C:\tranquilit\tisdashd6\uVisTISDash.pas
 Count=7
 EditWindowCount=1
 PackageWindowCount=1
@@ -27,7 +27,7 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[C:\tranquilit\tisvcl\OpenERPSourceEditor.pas]
+[c:\program files\borland\delphi6\Lib\DBClient.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -42,22 +42,22 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[C:\tranquilit\waptmanage\uDMOpenERP.pas]
+[C:\tranquilit\tisvcl\OpenERPSourceEditor.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[C:\tranquilit\waptmanage\uwaptservergui.pas]
+[C:\tranquilit\tisdashd6\uVisDetailsTask.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[c:\program files\borland\delphi6\Lib\DBClient.pas]
+[C:\tranquilit\tisdashd6\uVisTISDash.pas]
 ModuleType=SourceModule
 FormState=0
-FormOnTop=0
+FormOnTop=1
 
-[c:\tranquilit\tisvcl\tisopenerp.dpk]
+[C:\tranquilit\tisvcl\tisopenerp.dpk]
 FormState=0
 FormOnTop=1
 
@@ -65,7 +65,11 @@ FormOnTop=1
 FormState=0
 FormOnTop=0
 
-[C:\tranquilit\waptmanage\waptmanage.dpr]
+[C:\tranquilit\tisdashd6\tisdash.dpr]
+FormState=0
+FormOnTop=0
+
+[C:\tranquilit\tisdashd6\uDMOpenERP.pas]
 FormState=0
 FormOnTop=0
 
@@ -98,27 +102,27 @@ LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000
 RightPanelSize=0
 BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D65737361676556696577000000000000000000000000000000000001000000000000000000000000FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965779005000000000000023400000000000000010000000000000000000000000100000000900500000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
-Module=C:\tranquilit\waptmanage\uwaptservergui.pas
-CursorX=5
-CursorY=277
-TopLine=263
+Module=C:\tranquilit\tisdashd6\uVisTISDash.pas
+CursorX=21
+CursorY=2409
+TopLine=2402
 LeftCol=1
 
 [View1]
-Module=C:\tranquilit\waptmanage\uDMOpenERP.pas
-CursorX=32
-CursorY=6
+Module=C:\tranquilit\tisdashd6\uVisDetailsTask.pas
+CursorX=62
+CursorY=7
 TopLine=1
 LeftCol=1
 
 [View2]
 Module=c:\tranquilit\tisvcl\OpenERPProvider.pas
-CursorX=1
-CursorY=554
-TopLine=523
+CursorX=35
+CursorY=454
+TopLine=441
 LeftCol=1
 
 [View3]
@@ -169,7 +173,7 @@ TextLabels=1
 Toolbar=1
 SectionWidth0=150
 SectionWidth1=210
-Module=c:\tranquilit\tisvcl\tisopenerp.dpk
+Module=C:\tranquilit\tisvcl\tisopenerp.dpk
 
 [Watches]
 Count=0

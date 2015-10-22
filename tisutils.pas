@@ -10,6 +10,8 @@ type
       constructor Create(const URL: string);
   end;
 
+  TDynStringArray=Array of String;
+  TDynIntArray=Array of Integer;
 
 function Appuserinipath:String;
 function GetUserName : String;
@@ -46,6 +48,12 @@ function EncodeURIComponent(const ASrc: string): UTF8String;
 function ISODebutSem(ADate:TDateTime):TDateTime;
 function ISOFinSem(ADate:TDateTime):TDateTime;
 
+function StrSplit(St: AnsiString; Sep: Char): TDynStringArray; 
+function StrSplitInt(St: AnsiString; Sep: Char): TDynIntArray;
+
+function StrJoin(Sep: String; StrArray: TDynStringArray): String;
+function StrIn(st:String;StrArray: TDynStringArray):Boolean;
+function IntIn(id:Integer;IntArray: TDynIntArray):Boolean;
 
 implementation
 
@@ -54,6 +62,86 @@ uses jclshell,ShlObj,wininet,jcldatetime,jclstrings,idhttp;
 
 var
   GlobalHINET:HINTERNET;
+
+function StrIn(st:String;StrArray: TDynStringArray):Boolean;
+var
+  i:integer;
+begin
+  for i:=low(StrArray) to high(StrArray) do
+  begin
+    if st = StrArray[i] then
+    begin
+      Result := True;
+      Exit;
+    end;
+  end;
+  Result := False;
+end;
+
+
+function intIn(id:integer;IntArray: TDynIntArray):Boolean;
+var
+  i:integer;
+begin
+  for i:=low(IntArray) to high(IntArray) do
+  begin
+    if id = IntArray[i] then
+    begin
+      Result := True;
+      Exit;
+    end;
+  end;
+  Result := False;
+end;
+
+function StrSplit(St: AnsiString; Sep: Char): TDynStringArray; 
+var
+  tok : AnsiString;
+  len : integer;
+begin
+  len := 0;
+  SetLength(Result,0);
+  repeat
+    tok := StrToken(St,Sep);
+    if tok<>'' then
+    begin
+      inc(len);
+      SetLength(Result,len);
+      Result[len-1] := tok;
+    end;
+  until St='';
+end;
+
+function StrSplitInt(St: AnsiString; Sep: Char): TDynIntArray;
+var
+  tok : AnsiString;
+  len : integer;
+begin
+  len := 0;
+  SetLength(Result,0);
+  repeat
+    tok := StrToken(St,Sep);
+    if tok<>'' then
+    begin
+      inc(len);
+      SetLength(Result,len);
+      Result[len-1] := StrToIntSafe(tok);
+    end;
+  until St='';
+end;
+
+function StrJoin(Sep: String; StrArray: TDynStringArray): String;
+var
+  i:integer;
+begin
+  Result := '';
+  for i:=0 to length(StrArray)-1 do
+  begin
+    Result:=Result+StrArray[i];
+    if i<length(StrArray)-1 then
+      Result := Result+Sep;
+  end;
+end;
 
 
 function GetCmdParams(ID:String;Default:String=''):String;
@@ -373,8 +461,6 @@ begin
 	Result := ISOWeekToDateTime(Y, W, 7);
 end;
 
-
-
 function phonenormalize(phone:String):String;
 var
   i:integer;
@@ -384,13 +470,23 @@ begin
   for i:=1 to length(phone) do
     if CharIsDigit(Phone[i]) then
       Result := Result+phone[i];
+
   if copy(Result,1,4)='0033' then
     result := copy(result,5,255);
-  //ajout un zéro en tête
-  if (length(result)=9) and (result[1]<>'0')
-    then result := '0'+Result;
-  if length(result)>=10 then
-    result := copy(result,1,2)+'.'+copy(result,3,2)+'.'+copy(result,5,2)+'.'+copy(result,7,2)+'.'+copy(result,9,2);
+
+  if length(Result)>4 then
+  begin
+    if copy(Result,1,2)='00' then
+      Result := copy(Result,1,4)+'.'+copy(Result,5,1)+'.'+copy(Result,6,2)+'.'+copy(Result,8,2)+'.'+copy(Result,10,2)+'.'+copy(Result,12,255)
+    else
+    begin
+      //ajout un zéro en tête
+      if result[1]<>'0'
+        then result := '0'+Result;
+
+      Result := copy(Result,1,2)+'.'+copy(Result,3,2)+'.'+copy(Result,5,2)+'.'+copy(Result,7,2)+'.'+copy(Result,9,255);
+    end;
+  end;
 end;
 
 function phonesimplify(number:String):String;

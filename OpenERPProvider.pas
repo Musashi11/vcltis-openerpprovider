@@ -456,10 +456,13 @@ begin
             fdescription := fname;
           if ftype='integer' then
             dsf :=  TIntegerField.Create(targetdataset)
-          else if (ftype='string') then
+          else if (ftype='string') or (ftype='char') then
           begin
             try
-              fmaxlen := fd['size'].AsInteger;
+              if fd.AsObject.Exists('size') then
+                fmaxlen := fd['size'].AsInteger
+              else
+                fmaxlen := 8000;
             except
             end;
             dsf := TStringField.Create(targetdataset);
@@ -1204,15 +1207,15 @@ var
   so : ISuperObject;
 begin
   Result := '';
-  so := CallMethodSO('perm_read',['['+id+']','null','true']);
-  if so.AsArray.Length>0 then
+  //so := CallMethodSO('perm_read',['['+id+']','null','true']);
+  {if so.AsArray.Length>0 then
   begin
     so := so.AsArray[0];
     if so<>Nil then
       result :=
         'Créé le '+ copy(so['create_date'].AsString,1,16)+' par '+so['create_uid'].asArray[1].AsString+
         ', modifié le '+copy(so['write_date'].AsString,1,16)+' par '+so['write_uid'].asArray[1].AsString;
-  end
+  end}
 end;
 
 procedure TOpenERPProvider.Setmetadata(const Value: ISuperObject);
@@ -1301,7 +1304,15 @@ begin
     if action_url[1]<>'/' then
       action_url := '/'+action_url;
     url := openerp_proxyserver+action_url;
-    http.Get(url,Stream);
+    {if data<>'' then
+    try
+      st := TMemoryStream.Create;
+      http.post(url,Stream);
+    finally
+      st.Free;
+    end
+    else}
+      http.get(url,Stream);
   finally
     http.DisconnectNotifyPeer;
     if http<>Nil then

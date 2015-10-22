@@ -1,6 +1,6 @@
 object VisOpenERPLookupName: TVisOpenERPLookupName
   Left = 528
-  Top = 354
+  Top = 394
   Width = 416
   Height = 302
   Caption = 'Recherche'
@@ -71,7 +71,7 @@ object VisOpenERPLookupName: TVisOpenERPLookupName
   end
   object Panel2: TPanel
     Left = 0
-    Top = 233
+    Top = 234
     Width = 408
     Height = 41
     Align = alBottom
@@ -129,7 +129,7 @@ object VisOpenERPLookupName: TVisOpenERPLookupName
     Left = 0
     Top = 37
     Width = 408
-    Height = 196
+    Height = 197
     Bands = <
       item
       end>
