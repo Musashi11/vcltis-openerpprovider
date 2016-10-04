@@ -40,7 +40,8 @@ function httpNewStream(url:String):TStream;
 function ExpandEnvVars(const Str: string): string;
 
 
-function phonenormalize(phone:String):String;
+function phonenormalize(number:String):String;
+function phonenormalize2(phone:String):String;
 function phonesimplify(number:String):String;
 function PhoneCallCompose(phoneproxy_url,fromnumber,tonumber:String):boolean;
 function EncodeURIComponent(const ASrc: string): UTF8String;
@@ -461,7 +462,36 @@ begin
 	Result := ISOWeekToDateTime(Y, W, 7);
 end;
 
-function phonenormalize(phone:String):String;
+function phonesimplify(number:String):String;
+var
+  i:integer;
+begin
+  Result:='';
+  for i:=1 to length(number) do
+     if CharIsDigit(number[i]) or (number[i]='+') then
+      Result := Result + number[i];
+end;
+
+function phonenormalize(number:String):String;
+var
+  i:integer;
+begin
+  number:=phonesimplify(number);
+  if (copy(number,1,1)='+') or (length(number)<=5) then
+    Result := Number
+  else
+  begin
+    if copy(number,1,2)='00' then
+      Result := '+'+ copy(number,3,255)
+    else
+    if (copy(number,1,1)='0') and (length(number)>=10) then
+      Result := '+33'+ copy(number,2,255)
+    else
+      Result := number;
+  end;
+end;
+
+function phonenormalize2(phone:String):String;
 var
   i:integer;
 begin
@@ -489,15 +519,8 @@ begin
   end;
 end;
 
-function phonesimplify(number:String):String;
-var
-  i:integer;
-begin
-  Result:='';
-  for i:=1 to length(number) do
-     if CharIsDigit(number[i]) or (number[i]='+') then
-      Result := Result + number[i];
-end;
+
+
 
 function PhoneCallCompose(phoneproxy_url,fromnumber,tonumber:String):boolean;
 var

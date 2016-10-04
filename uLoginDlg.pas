@@ -22,6 +22,7 @@ type
 		{ Déclarations privées }
 	public
 		{ Déclarations publiques }
+
 	end;
 
 
@@ -30,8 +31,6 @@ implementation
 
 {$R *.DFM}
 uses tisutils;
-
-
 
 procedure TLoginDlg.EdLoginIdChange(Sender: TObject);
 begin

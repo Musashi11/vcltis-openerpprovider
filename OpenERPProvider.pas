@@ -15,12 +15,14 @@ type
     Fopenerp_login: string;
     Fopenerp_user_id: integer;
     Fopenerp_cacheable_classes: string;
+    Fuseraccount_data: ISUperObject;
     procedure Setopenerp_proxyserver(const Value: String);
     procedure Setopenerp_context(const Value: string);
     procedure Setopenerp_password(const Value: string);
     procedure Setopenerp_login(const Value: string);
     function getopenerp_user_id: integer;
     procedure Setopenerp_cacheable_classes(const Value: string);
+    function Getuseraccount_data: ISUperObject;
     { Déclarations privées }
   protected
     { Déclarations protégées }
@@ -29,6 +31,7 @@ type
     session_cookies : TidCookieManager;
     NameCache : TClientDataset;
     name_cache_timeout : integer; // minutes
+    property useraccount_data:ISUperObject read Getuseraccount_data write Fuseraccount_data;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure login;
@@ -1326,7 +1329,6 @@ var
   nbtry:integer;
 begin
   res := mrCancel;
-  Fopenerp_user_id := strtoint(http_post('login','openerp_login='+EncodeURIComponent(Fopenerp_login)+'&openerp_password='+EncodeURIComponent(Fopenerp_password),False));
   nbtry := 4;
   repeat
     if ((Fopenerp_user_id<=0) or (openerp_login='') or (openerp_password='')) and (nbtry>0) then
@@ -1347,6 +1349,7 @@ begin
       Free;
     end;
     Fopenerp_user_id := strtoint(http_post('login','openerp_login='+EncodeURIComponent(Fopenerp_login)+'&openerp_password='+EncodeURIComponent(Fopenerp_password),False));
+    //Fopenerp_user_id := strtoint(http_get('login?openerp_login='+EncodeURIComponent(Fopenerp_login)+'&openerp_password='+EncodeURIComponent(Fopenerp_password),False));
     dec(nbtry);
   until (Fopenerp_user_id>0) or (nbtry<=0);
   if Fopenerp_user_id<=0 then
@@ -1356,7 +1359,8 @@ end;
 procedure TOpenERPConnection.logout;
 begin
   http_get('logout',False);
-  Fopenerp_user_id:=-1;
+  Fopenerp_user_id := -1;
+  Fuseraccount_data := Nil;
 end;
 
 procedure TOpenERPConnection.Setopenerp_context(const Value: string);
@@ -1488,7 +1492,7 @@ end;
 
 function TOpenERPConnection.Name_get(aclass: String; aID: Integer): String;
 var
-  so : ISuperObject;
+  so,item : ISuperObject;
   fd:TField;
   tok:String;
   cacheable : Boolean;
@@ -1534,16 +1538,25 @@ begin
   begin
     so := CallMethodSO(aClass,'name_get',['['+intToStr(aID)+']']);
     if (so.DataType = stArray) and (so.AsArray.Length=1) then
-      result := so.AsArray[0].AsArray[1].AsString
+    begin
+      item := so.AsArray[0].AsArray[1];
+      if (item.DataType = stBoolean) or (item.AsString='False') then
+      begin
+        Result := '';
+        cacheable := False;
+      end
+      else
+        result := item.AsString;
+    end
     else
       raise Exception.create('ID '+intToStr(aid)+' not found in '+aclass+' table');
 
+    //Effacer entrée périmée
+    if not NameCache.eof and (NameCache['class'] = aClass) and (NameCache['id'] = aID)  then
+      NameCache.Delete;
+
     if Cacheable then
     begin
-      //Effacer entrée périmée
-      if not NameCache.eof and (NameCache['class'] = aClass) and (NameCache['id'] = aID)  then
-        NameCache.Delete;
-
       NameCache.Append;
       NameCache['datecreat'] := Now;
       NameCache['class'] := aclass;
@@ -1687,6 +1700,13 @@ begin
   Fopenerp_cacheable_classes := Value;
   if (NameCache<>Nil) and NameCache.Active then
     NameCache.EmptyDataSet;
+end;
+
+function TOpenERPConnection.Getuseraccount_data: ISUperObject;
+begin
+  if Fuseraccount_data = Nil then
+    Fuseraccount_data := CallMethodSO('hr.analytic.timesheet','on_change_user_id',['[]',intToStr(openerp_user_id)]);
+  Result := Fuseraccount_data;
 end;
 
 { TOpenERPClientDataset }
